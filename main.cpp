@@ -74,10 +74,13 @@ vector <string> crossPopulation(vector <string> population){
     vector <string> crossedPopulation;
     bool cross;
     for(int i = 0; i < population.size(); i+=2){
-        crossRandom(generator)<pr_krzyz ? cross = true : cross = false;
-        if(i+1 == population.size()) break;
-            child1 = "";
-            child2 = "";
+        crossRandom(generator) < pr_krzyz ? cross = true : cross = false;
+        if(i+1 == population.size()){
+            crossedPopulation.push_back(population.at(i));
+            break;
+        }
+        child1 = "";
+        child2 = "";
         if(cross){
             int cuttingPoint = cuttingPointRandom(generator);
             parent1 = population.at(i);
