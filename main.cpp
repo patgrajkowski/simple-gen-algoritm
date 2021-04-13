@@ -123,7 +123,7 @@ int main()
     for(int i = 0; i < ile_wyn; i++){
         vector <int> mutatedPopulation;
         vector <string> population = generateRandomPop();
-         for(int j = 0; j < lb_pop; j++){
+        for(int j = 0; j < lb_pop; j++){
             shuffle(population.begin(), population.end(), generator);
             population = mutatePopulation(population);
             population = crossPopulation(population);
