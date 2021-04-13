@@ -129,8 +129,8 @@ int main()
             population = crossPopulation(population);
             population = selectPopulation(population);
         }
-        for(string i : population){
-            mutatedPopulation.push_back(toDec(i));
+        for(string individual : population){
+            mutatedPopulation.push_back(toDec(individual));
         }
         int max = *max_element(mutatedPopulation.begin(), mutatedPopulation.end());
         cout<<"x = " << max << "   " << "f(x) = " << f(max) << endl;
