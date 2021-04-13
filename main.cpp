@@ -75,7 +75,7 @@ vector <string> crossPopulation(vector <string> population){
     bool cross;
     for(int i = 0; i < population.size(); i+=2){
         crossRandom(generator)<pr_krzyz ? cross = true : cross = false;
-        if(i+1 == population.size()) cross = false;
+        if(i+1 == population.size()) break;
             child1 = "";
             child2 = "";
         if(cross){
@@ -95,6 +95,7 @@ vector <string> crossPopulation(vector <string> population){
                 crossedPopulation.push_back(child2);
         }else{
             crossedPopulation.push_back(population.at(i));
+            crossedPopulation.push_back(population.at(i+1));
         };
     }
     return crossedPopulation;
