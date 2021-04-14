@@ -16,7 +16,7 @@ int const b = 7;
 int const c = 2;
 int const ile_wyn = 40;
 int const lb_pop = 3;
-int const ile_os = 15;
+int const ile_os = 10;
 int f(int x){
     return a*pow(x, 2)+(b*x)+c;
 }
@@ -123,8 +123,8 @@ int main(){
         vector <string> population = generateRandomPop();
         for(int j = 0; j < lb_pop; j++){
             shuffle(population.begin(), population.end(), generator);
-            population = mutatePopulation(population);
             population = crossPopulation(population);
+            population = mutatePopulation(population);
             population = selectPopulation(population);
         }
         for(string individual : population){
