@@ -6,17 +6,16 @@
 #include <chrono>
 #include <vector>
 #include <random>
-
 using namespace std;
 random_device randomDevice;
 mt19937 generator(randomDevice());
 double pr_krzyz = 0.9;
-double pr_mut = 0.15;
+double pr_mut = 0.1;
 int const a = 4;
 int const b = 7;
 int const c = 2;
 int const ile_wyn = 40;
-int const lb_pop = 10;
+int const lb_pop = 3;
 int const ile_os = 15;
 int f(int x){
     return a*pow(x, 2)+(b*x)+c;
@@ -118,8 +117,7 @@ vector <string> mutatePopulation(vector <string> population){
     }
     return mutatedPopulation;
 }
-int main()
-{
+int main(){
     for(int i = 0; i < ile_wyn; i++){
         vector <int> mutatedPopulation;
         vector <string> population = generateRandomPop();
