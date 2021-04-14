@@ -18,7 +18,7 @@ int const ile_wyn = 40;
 int const lb_pop = 3;
 int const ile_os = 10;
 int f(int x){
-    return a*pow(x, 2)+(b*x)+c;
+    return abs(a*pow(x, 2)+(b*x)+c);
 }
 int toDec(string x){
     int bin = stoi(x);
@@ -58,7 +58,7 @@ vector <string> selectPopulation(vector <string> population){
     double decValue;
     for(string individual : population){
         decValue =f(toDec(individual));
-        populationDist.push_back((decValue/sum)*100);
+        populationDist.push_back((decValue/sum));
     }
     discrete_distribution<> discreteDist(populationDist.begin(), populationDist.end());
         for(double value : populationDist) {
