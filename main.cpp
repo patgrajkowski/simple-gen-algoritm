@@ -6,6 +6,7 @@
 #include <chrono>
 #include <vector>
 #include <random>
+#include <fstream>
 using namespace std;
 random_device randomDevice;
 mt19937 generator(randomDevice());
@@ -18,7 +19,7 @@ int const ile_wyn = 40;
 int const lb_pop = 3;
 int const ile_os = 10;
 int f(int x){
-    return abs(a*pow(x, 2)+(b*x)+c);
+    return a*pow(x, 2)+(b*x)+c;
 }
 int toDec(string x){
     int bin = stoi(x);
@@ -44,8 +45,8 @@ vector <string> generateRandomPop(int populationSize = ile_os){
     }
     return population;
 }
-int getSum(vector <string> population){
-    int sum = 0;
+double getSum(vector <string> population){
+    double sum = 0;
     for(string individual : population){
         sum+= f(toDec(individual));
     }
@@ -55,15 +56,43 @@ vector <string> selectPopulation(vector <string> population){
     vector <double> populationDist;
     vector <string> selectedIndividuals;
     int sum = getSum(population);
+    uniform_real_distribution<double> populationRandom(0.0, 1.0);
+    double random;
     double decValue;
-    for(string individual : population){
-        decValue =f(toDec(individual));
-        populationDist.push_back((decValue/sum));
-    }
-    discrete_distribution<> discreteDist(populationDist.begin(), populationDist.end());
-        for(double value : populationDist) {
-            selectedIndividuals.push_back(population[discreteDist(generator)]);
+    double prop;
+    int length = population.size();
+    for(int i = 0; i < population.size(); i++){
+        decValue = f(toDec(population[i]));
+        prop = decValue / sum;
+        if(i==0){
+        populationDist.push_back(prop);
+        }else{
+        populationDist.push_back((populationDist[i-1]+prop));
         }
+    }
+    for(int i = 0; i < population.size(); i++){
+        decValue = f(toDec(population[i]))/sum;
+        if(i==0){
+        populationDist.push_back(decValue);
+        }else{
+        populationDist.push_back((populationDist[i-1]+decValue));
+        }
+    }
+    for(int i = 0; i < population.size(); i++){
+        random = populationRandom(generator);
+        for(int j = 0; j < population.size(); j++){
+            if (j == 0){
+                if(random >= 0 && random < populationDist[j]){
+                    selectedIndividuals.push_back(population[j]);
+                    continue;
+                }
+            }else{
+                if(random >= populationDist[j-1] && random < populationDist[j]){
+                    selectedIndividuals.push_back(population[j]);
+                }
+            }
+        }
+    }
     return selectedIndividuals;
 }
 vector <string> crossPopulation(vector <string> population){
@@ -118,8 +147,13 @@ vector <string> mutatePopulation(vector <string> population){
     return mutatedPopulation;
 }
 int main(){
+    ofstream file;
+    file.open ("results.txt");
     for(int i = 0; i < ile_wyn; i++){
-        vector <int> mutatedPopulation;
+        vector <int> mutatedPopulationFx;
+        vector <int> mutatedPopulationX;
+        int maxIndex;
+        vector<int>::iterator result;
         vector <string> population = generateRandomPop();
         for(int j = 0; j < lb_pop; j++){
             shuffle(population.begin(), population.end(), generator);
@@ -128,11 +162,16 @@ int main(){
             population = selectPopulation(population);
         }
         for(string individual : population){
-            mutatedPopulation.push_back(toDec(individual));
+            mutatedPopulationFx.push_back(f(toDec(individual)));
+            mutatedPopulationX.push_back(toDec(individual));
         }
-        int max = *max_element(mutatedPopulation.begin(), mutatedPopulation.end());
-        cout<<"x = " << max << "   " << "f(x) = " << f(max) << endl;
-        mutatedPopulation.clear();
+        result = max_element(mutatedPopulationFx.begin(), mutatedPopulationFx.end());
+        maxIndex = distance(mutatedPopulationFx.begin(), result);
+        cout << mutatedPopulationX[maxIndex] << "   " << mutatedPopulationFx[maxIndex] << endl;
+        file << to_string(mutatedPopulationX[maxIndex]) + "  " + to_string(mutatedPopulationFx[maxIndex]) + "\n";
+        mutatedPopulationFx.clear();
+        mutatedPopulationX.clear();
         population.clear();
     }
+        file.close();
 }
